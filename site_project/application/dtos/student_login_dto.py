@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
-class StudentDTO(BaseModel):
+class StudentLoginDTO(BaseModel):
     name: str
     email:str
-    gender: str
-    course: str
+    password:str
