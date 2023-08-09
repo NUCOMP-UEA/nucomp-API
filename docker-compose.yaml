@@ -1,14 +1,15 @@
-version: '3'
+version: "3"
 services:
-  agregas-database:
-    image: mongo
+  site-database:
+    image: mongo:6.0.6
     container_name: site-project
+    restart: always 
     environment:
       - MONGO_INITDB_DATABASE=site
       - MONGO_INITDB_ROOT_USERNAME=site
       - MONGO_INITDB_ROOT_PASSWORD=site
     ports:
-      - 27030:27017
+      - 27020:27017
     volumes:
       - ./mongo/data:/data/db
 
