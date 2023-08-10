@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+
 from site_project.domain.entities.base import Base
 from typing import Optional
 

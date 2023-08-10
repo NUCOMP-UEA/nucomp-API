@@ -10,7 +10,7 @@ from fastapi import Depends, status
 from fastapi.security import OAuth2PasswordBearer
 
 # Create an instance of APIRouter
-student_router= APIRouter(
+teacher_router= APIRouter(
     prefix=os.getenv("API_ROUTER_PREFIX", "/nucomp")
 )
 
@@ -22,20 +22,21 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
-@student_router.get("/")
+@teacher_router.get("/")
 async def read_root():
     return {"message": "Hello, this is the root endpoint!"}
 
-@student_router.post("/signup",response_model=Student,status_code=status.HTTP_201_CREATED)
+@teacher_router.post("/signup",response_model=Student,status_code=status.HTTP_201_CREATED)
 async def create_student(student:StudentCreationDTO):
     await StudentService.signup(student)
 
-@student_router.post("/login/",response_model=StudentLoginDTO)
+@teacher_router.post("/login/",response_model=StudentLoginDTO)
 async def login(student_login:StudentLoginDTO):
     return await StudentService.login(student_login)
 
     
-@student_router.delete("delete")
+@teacher_router.delete("delete")
 async def delete(token: str = Depends(oauth2_scheme)):
     payload = decode_access_token(token)
     username = payload.get("sub")
+    await StudentService.

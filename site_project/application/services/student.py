@@ -2,10 +2,11 @@ from site_project.application.infra.database.student import StudentRepository
 from fastapi import FastAPI, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta
-import jwt
-from site_project.utils.authentication import create_access_token, decode_access_token
 
-SECRET_KEY = "your-secret-key"
+from site_project.utils.authentication import create_access_token, decode_access_token
+import os
+
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -42,6 +43,9 @@ class StudentService:
     
     async def update_student(cls,student):
         await StudentRepository.update(dict(student))
+
+    asynce def delete_student(cls,student):
+        await StudentRepository.delete()
 
 
 
