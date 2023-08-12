@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
 class StudentLoginDTO(BaseModel):
-    name: str
+    username: str
     email:str
     password:str

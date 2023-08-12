@@ -4,6 +4,8 @@ class Base(BaseModel):
     name: str
     email:str
     gender: str
-    course: str
-    curriculum_lattes_url: str
-    linkedin_url: str
+    course: str 
+    password:str
+    curriculum_lattes_url: str = None
+    linkedin_url: str = None
+    

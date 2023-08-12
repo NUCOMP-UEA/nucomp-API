@@ -1,7 +1,7 @@
 from fastapi import  APIRouter,status
 import os
 
-from fastapi import Depends
+from fastapi import Depends,Response
 from site_project.domain.entities.student import Student
 from site_project.application.dtos.student_creation_dto import StudentCreationDTO, StudentLoginDTO
 from site_project.application.services.student import StudentService
@@ -27,14 +27,15 @@ async def read_root():
 
 @student_router.post("/signup",response_model=Student,status_code=status.HTTP_201_CREATED)
 async def create_student(student:StudentCreationDTO):
-    await StudentService.signup(student)
+    return await StudentService.signup(student)
+    
 
 @student_router.post("/login/",response_model=StudentLoginDTO)
 async def login(student_login:StudentLoginDTO):
     return await StudentService.login(student_login)
 
     
-@student_router.delete("delete")
+@student_router.delete("/delete")
 async def delete(token: str = Depends(oauth2_scheme)):
     payload = decode_access_token(token)
     username = payload.get("sub")
