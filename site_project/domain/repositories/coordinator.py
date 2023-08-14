@@ -4,7 +4,7 @@ from uuid import UUID
 from site_project.application.dtos.creation_dto import StudentCreationDTO
 
 
-class IStudentRepository(ABC):
+class ICoordinator(ABC):
     @classmethod
     @abstractmethod
     def create(cls, student_dto: StudentCreationDTO):

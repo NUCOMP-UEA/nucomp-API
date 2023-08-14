@@ -1,8 +1,12 @@
-from pydantic import BaseModel
-from site_project.domain.entities.base import Base
 from typing import Optional
 
-class Coordinator(Base):
-    academic_title : str
+from pydantic import HttpUrl
+
+from site_project.domain.entities.base import BaseUser
+
+
+class Coordinator(BaseUser):
+    academic_title: str
     photo: Optional[bytes]
-    
+    curriculum_lattes_url: Optional[str]
+    linkedin_url: Optional[str]

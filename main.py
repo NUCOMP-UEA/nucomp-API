@@ -1,5 +1,6 @@
-from site_project.app import app
 import uvicorn
 
-if __name__ == '__main__':
+from site_project.app import app
+
+if __name__ == "__main__":
     uvicorn.run(app)
