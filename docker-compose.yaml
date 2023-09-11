@@ -1,0 +1,14 @@
+version: "3"
+services:
+  site-database:
+    image: mongo:6.0.6
+    container_name: site-project
+    restart: always 
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=site
+      - MONGO_INITDB_ROOT_PASSWORD=site
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo/data:/data/db
+

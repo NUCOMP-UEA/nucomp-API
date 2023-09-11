@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "site-eng-comp"
+version = "0.1.0"
+description = ""
+authors = ["Nádila Azevedo <ndsda.eng19@uea.edu.br>"]
+readme = "README.md"
+packages = [{include = "site_eng_comp"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pydantic = "^2.1.1"
+motor = "^3.2.0"
+fastapi = "^0.101.0"
+uvicorn = "^0.23.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
