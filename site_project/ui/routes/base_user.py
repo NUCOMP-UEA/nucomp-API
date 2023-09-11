@@ -8,7 +8,7 @@ from site_project.application.dtos.creation_dto import BaseDTO
 from site_project.application.services.user_creation import UserCreation
 from site_project.application.services.user_login import UserLogin
 
-nucomp_router = APIRouter(prefix=os.getenv("API_ROUTER_PREFIX", "/nucomp"))
+nucomp_router = APIRouter(prefix="/nucomp")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
@@ -17,8 +17,8 @@ async def read_root():
     return {"message": "Hello, this is the root endpoint!"}
 
 
-@nucomp_router.post("/signup")
-async def create_user(user: BaseDTO, status_code=status.HTTP_201_CREATED):
+@nucomp_router.post("/signup", status_code=status.HTTP_201_CREATED)
+async def create_user(user: BaseDTO):
     return await UserCreation.signup(user)
 
 

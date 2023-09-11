@@ -1,7 +1,7 @@
 # from site_project.application.dtos.creation_dto import TeacherCreationDTO
-from site_project.domain.repositories.teacher_repository import \
-    ITeacherRepository
+from site_project.domain.repositories.teacher_repository import ITeacherRepository
 from site_project.infra.database.base import DatabaseMeta
+from site_project.infra.database.utils.criation_utils import update_info
 
 
 class TeacherRepository(ITeacherRepository, metaclass=DatabaseMeta):
@@ -11,12 +11,8 @@ class TeacherRepository(ITeacherRepository, metaclass=DatabaseMeta):
     @classmethod
     async def create(cls, teacher, pwd_context):
         password = teacher.password
-        teacher_dict = teacher.dict()
-        hashed_password = pwd_context.hash(password)
-        teacher_dict["id_"] = str(teacher_dict["id_"])
-        teacher_dict["password"] = hashed_password
-
-        del teacher_dict["user_type"]
+        teacher_dict = update_info(teacher)
+        teacher_dict["password"] = pwd_context.hash(password)
         await cls.collection.insert_one(teacher_dict)
 
     @classmethod

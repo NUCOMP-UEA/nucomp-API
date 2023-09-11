@@ -1,17 +1,6 @@
-import os
-
-import bcrypt
-from passlib.context import CryptContext
-
-from site_project.domain.repositories.student_repository import \
-    IStudentRepository
+from site_project.domain.repositories.student_repository import IStudentRepository
 from site_project.infra.database.base import DatabaseMeta
-from site_project.utils.authentication import (create_access_token,
-                                               decode_access_token)
-
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+from site_project.infra.database.utils.criation_utils import update_info
 
 
 class StudentRepository(IStudentRepository, metaclass=DatabaseMeta):
@@ -21,11 +10,8 @@ class StudentRepository(IStudentRepository, metaclass=DatabaseMeta):
     @classmethod
     async def create(cls, student, pwd_context):
         password = student.password
-        student_dict = student.dict()
-        student_dict["id_"] = str(student_dict["id_"])
-        hashed_password = pwd_context.hash(password)
-        student_dict["password"] = hashed_password
-        del student_dict["user_type"]
+        student_dict = update_info(student)
+        student_dict["password"] = pwd_context.hash(password)
         await cls.collection.insert_one(student_dict)
 
     @classmethod

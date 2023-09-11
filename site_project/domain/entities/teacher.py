@@ -1,7 +1,8 @@
 from typing import List, Optional
-from uuid import UUID
+from uuid import UUID, uuid4
 
-from pydantic import BaseModel, HttpUrl
+from pydantic.fields import Field
+from pydantic import HttpUrl
 
 from site_project.domain.entities.base import BaseUser
 
@@ -10,7 +11,7 @@ class Teacher(BaseUser):
     related_subjects: List
     areas_of_interest: List
     academic_title: str
-    personal_site: Optional[HttpUrl]
+    personal_site: Optional[str]
     photo: Optional[bytes]
     curriculum_lattes_url: Optional[str]
     linkedin_url: Optional[str]

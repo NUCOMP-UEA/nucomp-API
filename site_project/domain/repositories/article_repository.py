@@ -1,32 +1,29 @@
 from abc import ABC, abstractmethod
-from uuid import UUID
-
-from site_project.application.dtos.creation_dto import CoordinatorCreationDTO
 from site_project.domain.entities.news import News
 
 
-class ICoordinator(ABC):
+class IArticleRepository(ABC):
     @classmethod
     @abstractmethod
-    def create(cls, coordinator_dto: CoordinatorCreationDTO):
+    def create_article(cls, news: News):
         raise NotImplementedError
 
     @classmethod
     @abstractmethod
-    def get_user(cls, email: str):
+    def get_article_by_id(cls, news_id):
         raise NotImplementedError
 
     @classmethod
     @abstractmethod
-    def update(cls, coordinator_id: UUID, coordinator):
+    def delete_article(cls, news_id):
         raise NotImplementedError
 
     @classmethod
     @abstractmethod
-    def delete(cls, coordinator):
+    def update_article(cls, news_id, news):
         raise NotImplementedError
 
     @classmethod
     @abstractmethod
-    def publish_news(cls, news: News):
+    def list_articles(cls):
         raise NotImplementedError

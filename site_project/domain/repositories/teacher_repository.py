@@ -7,7 +7,7 @@ from site_project.application.dtos.creation_dto import TeacherCreationDTO
 class ITeacherRepository(ABC):
     @classmethod
     @abstractmethod
-    async def create(cls, teacher):
+    async def create(cls, teacher: TeacherCreationDTO):
         raise NotImplementedError
 
     @classmethod

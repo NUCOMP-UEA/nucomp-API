@@ -1,14 +1,15 @@
 from datetime import datetime
+from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import HttpUrl
 
 from site_project.domain.entities.base import BaseUser
 
 
 class Student(BaseUser):
     year_of_admission: datetime
-    curriculum_lattes_url: str = None
-    linkedin_url: str = None
+    curriculum_lattes_url: Optional[str]
+    linkedin_url: Optional[str]
 
     @classmethod
     def to_student(cls, base_info, student):

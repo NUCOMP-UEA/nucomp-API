@@ -1,27 +1,17 @@
-import os
-from datetime import timedelta
-
 from fastapi import Depends, HTTPException
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordBearer
-from passlib.context import CryptContext
 
 from site_project.domain.entities.coordinator import Coordinator
 from site_project.infra.database.coordinator import CoordinatorRepository
-from site_project.utils.authentication import (create_access_token,
-                                               decode_access_token)
-
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="nucomp/login")
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from site_project.settings.authentication_settings import AuthenticationSettings
+from site_project.utils.authentication import decode_access_token
 
 
 class CoordinatorService:
-    async def get_current_user(token: str = Depends(oauth2_scheme)):
+    @staticmethod
+    async def get_current_user(
+        token: str = Depends(AuthenticationSettings.oauth2_scheme),
+    ):
         user = None
         payload = decode_access_token(token)
         email = payload.get("sub")
@@ -31,6 +21,7 @@ class CoordinatorService:
             return user
         return None
 
+    @staticmethod
     async def get_user_by_id(cls, user_id):
         user = await CoordinatorRepository.get_user_by_id(user_id)
         if not user:
@@ -38,11 +29,11 @@ class CoordinatorService:
         return user
 
     @classmethod
-    async def signup(cls, user_id, student_signup_dto):
+    async def signup(cls, user_id, coordinator_signup_dto):
         user = await CoordinatorRepository.get_user_by_id(user_id)
-        student = Coordinator.to_entity(user, student_signup_dto)
-        student.id_ = str(student.id_)
-        await CoordinatorRepository.update(user_id, student)
+        coordinator = Coordinator.to_entity(user, coordinator_signup_dto)
+        coordinator.id_ = str(coordinator.id_)
+        await CoordinatorRepository.update(user_id, coordinator)
         message = {"message": "user successfully created"}
         response = JSONResponse(content=message)
         return response

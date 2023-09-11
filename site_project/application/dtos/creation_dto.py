@@ -6,6 +6,21 @@ from pydantic import BaseModel, HttpUrl
 from pydantic.fields import Field
 
 
+from pydantic import BaseModel
+from typing import Optional, List
+from datetime import datetime
+from pydantic.fields import Field
+from uuid import UUID, uuid4
+
+
+class NewsDTO(BaseModel):
+    title: str
+    caption: str
+    image: Optional[bytes]
+    published_at: datetime
+    published_by: str
+    tags: List
+
 class BaseDTO(BaseModel):
     id_: UUID = Field(default_factory=uuid4)
     email: str
@@ -40,3 +55,20 @@ class CoordinatorCreationDTO(BaseModel):
     academic_title: str
     curriculum_lattes_url: str = None
     linkedin_url: str = None
+
+
+class ArticleCreationDTO(BaseModel):
+    authors: List[str]
+    title: str
+    published_in: str
+    published_at: datetime
+    article_url: str
+
+class EventCreationDTO(BaseModel):
+    title: str
+    image: Optional[bytes]
+    place: str
+    date: datetime
+    site_url: str
+
+    

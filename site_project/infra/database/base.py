@@ -9,8 +9,8 @@ class Settings:
 
     def __new__(cls, name, bases, attrs):
         client = AsyncIOMotorClient(os.getenv("MONGO_URL"))
-        db = client.project
-        collection = db[attrs.get("collection_name")]
+        database = client.project
+        collection = database[attrs.get("collection_name")]
         attrs["collection"] = collection
         cls._instance = super().__new__(cls, name, bases, attrs)
         return cls._instance

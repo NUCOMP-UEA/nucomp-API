@@ -12,7 +12,7 @@ class TypeUser(str, Enum):
 
 
 class BaseUser(BaseModel):
-    id_: UUID
+    id_: UUID = Field(default_factory=uuid4)
     name: str
     email: str
     gender: str

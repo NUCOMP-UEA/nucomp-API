@@ -1,5 +1,6 @@
 from site_project.domain.repositories.coordinator import ICoordinator
 from site_project.infra.database.base import DatabaseMeta
+from site_project.infra.database.utils.criation_utils import update_info
 
 
 class CoordinatorRepository(ICoordinator, metaclass=DatabaseMeta):
@@ -9,11 +10,8 @@ class CoordinatorRepository(ICoordinator, metaclass=DatabaseMeta):
     @classmethod
     async def create(cls, coordinator, pwd_context):
         password = coordinator.password
-        coordinator_dict = coordinator.dict()
-        hashed_password = pwd_context.hash(password)
-        coordinator_dict["password"] = hashed_password
-        coordinator_dict["id_"] = str(coordinator_dict["id_"])
-        del coordinator_dict["user_type"]
+        coordinator_dict = update_info(coordinator)
+        coordinator_dict["password"] = pwd_context.hash(password)
         await cls.collection.insert_one(coordinator_dict)
 
     @classmethod
