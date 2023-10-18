@@ -1,7 +1,7 @@
 from site_project.domain.repositories.student_repository import IStudentRepository
 from site_project.infra.database.base import DatabaseMeta
 from site_project.infra.database.utils.criation_utils import update_info
-
+from site_project.domain.entities.base import BaseUser
 
 class StudentRepository(IStudentRepository, metaclass=DatabaseMeta):
     collection_name = "student"
@@ -9,10 +9,12 @@ class StudentRepository(IStudentRepository, metaclass=DatabaseMeta):
 
     @classmethod
     async def create(cls, student, pwd_context):
+        base_user = BaseUser(**student.dict())
         password = student.password
-        student_dict = update_info(student)
+        student_dict = update_info(base_user)
         student_dict["password"] = pwd_context.hash(password)
         await cls.collection.insert_one(student_dict)
+        return student_dict
 
     @classmethod
     async def get_user_by_id(cls, user_id):

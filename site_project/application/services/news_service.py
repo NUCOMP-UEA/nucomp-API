@@ -4,15 +4,20 @@ from site_project.domain.entities.news import News
 
 class NewsService:
     @classmethod
-    async def publish_news(cls, news):
+    async def publish_news(cls, news,file):
         news = News(**news.dict())
         news.id_ = str(news.id_)
+        news.image = file
         await NewsRepository.create_news(news)
 
     @classmethod
-    async def get_all_news(cls):
-        return await NewsRepository.list_news()
+    async def get_all_news(cls, page, per_page):
+        skip = (page - 1) * per_page
+        items = await NewsRepository.list_news(skip, page)
+        news = list(items)
+        return news
 
+    
     @classmethod
     async def get_news(cls, news_id):
         news = await NewsRepository.get_news_by_id(news_id)

@@ -1,5 +1,5 @@
 import os
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from site_project.domain.entities.news import News
 from site_project.application.services.coordinator import CoordinatorService
 from site_project.application.services.teacher import TeacherService
@@ -36,11 +36,15 @@ async def article_creation(
         raise HTTPException(
             status_code=500, detail="It was not possible to publish the news."
         )
+    
+    response = {"message": "article was successfully created"}
+    return JSONResponse(status_code=201, content=response)
 
 
-@articles_router.get("/list/")
-async def get_articles():
-    return await ArticleService.list_all_articles()
+@articles_router.get("/list/", response_model=List[Article])
+async def get_articles(page: int = Query(1, description="Page number", ge=1), per_page: int = Query(10, description="Items per page", le=100)):
+    articles = ArticleService.list_all_articles(page, per_page)
+    return await articles
 
 
 @articles_router.patch("/update/")

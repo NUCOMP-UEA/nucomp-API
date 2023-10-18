@@ -18,7 +18,7 @@ class ArticleRepository(IArticleRepository, metaclass=DatabaseMeta):
 
     @classmethod
     async def delete_article(cls, article_id):
-        print(article_id)
+
         await cls.collection.delete_one(dict(id_=article_id))
 
     @classmethod
@@ -26,23 +26,8 @@ class ArticleRepository(IArticleRepository, metaclass=DatabaseMeta):
         await cls.collection.replace_one(dict(id_=article_id),article)
 
     @classmethod
-    async def list_articles(cls):
+    async def list_articles(cls, skip, per_page):
+        articles = await cls.collection.find().skip(skip).limit(per_page).to_list(length=None)
         
-        pipeline = [
-            {
-                "$project": {
-                    "_id": 0,
-                    "id_": 1,
-                    "authors": 1,
-                    "title": 1,
-                    "published_in": 1,
-                    "published_at": 1,
-                    "published_by": 1,
-                    "article_url": 1,
-                   
-                }
-            }
-        ]
+        return articles
        
-        return await cls.collection.aggregate(pipeline).to_list(length=None)
-    

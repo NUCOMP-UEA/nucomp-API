@@ -4,25 +4,24 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, HttpUrl
 from pydantic.fields import Field
-
+from fastapi import FastAPI, File, UploadFile
 
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
-from pydantic.fields import Field
-from uuid import UUID, uuid4
+
+
 
 
 class NewsDTO(BaseModel):
     title: str
     caption: str
-    image: Optional[bytes]
+    # image: Optional[bytes]
     published_at: datetime
     published_by: str
     tags: List
 
 class BaseDTO(BaseModel):
-    id_: UUID = Field(default_factory=uuid4)
     email: str
     gender: str
     course: str
@@ -53,8 +52,9 @@ class TeacherCreationDTO(BaseModel):
 class CoordinatorCreationDTO(BaseModel):
     name: str
     academic_title: str
-    curriculum_lattes_url: str = None
-    linkedin_url: str = None
+    photo: Optional[bytes] 
+    curriculum_lattes_url: str 
+    linkedin_url: str
 
 
 class ArticleCreationDTO(BaseModel):

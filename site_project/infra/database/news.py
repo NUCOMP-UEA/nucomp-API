@@ -24,25 +24,6 @@ class NewsRepository(INewsRepository, metaclass=DatabaseMeta):
         await cls.collection.replace_one(dict(id_=news_id),news)
 
     @classmethod
-    async def list_news(cls):
-        pipeline = [
-            {
-                "$project": {
-                    "_id": 0,
-                    "id_": 1,
-                    "title": 1,
-                    "caption": 1,
-                    "image": 1,
-                    "name": 1,
-                    "published_at": 1,
-                    "published_by": 1,
-                    "tags": 1,
-                   
-                }
-            }
-        ]
-        
-        # print(cls.collection.find().to_list(length=None))
-     
-       
-        return await cls.collection.aggregate(pipeline).to_list(length=None)
+    async def list_news(cls,skip, per_page):
+        news = await cls.collection.find().skip(skip).limit(per_page).to_list(length=None)
+        return news

@@ -36,5 +36,8 @@ class EventsService:
         await EventRepository.delete_article(event_id)
 
     @classmethod
-    async def list_events(cls):
-        return await EventRepository.list_events()
+    async def list_events(cls,page, per_page):
+        skip = (page - 1) * per_page
+        items = await EventRepository.list_events(skip, page)
+        result = list(items)
+        return result

@@ -5,16 +5,18 @@ from fastapi import APIRouter, Depends, status
 from site_project.application.dtos.creation_dto import CoordinatorCreationDTO
 from site_project.application.dtos.update_dto import UserUpdateDTO
 from site_project.application.services.coordinator import CoordinatorService
-
+from fastapi import FastAPI, File, UploadFile, Form 
+from site_project.ui.routes.utils.forms import get_coordinator_form
 coordinator_router = APIRouter(prefix=os.getenv("API_ROUTER_PREFIX_CORD"))
 
 
 @coordinator_router.post(
     "/signup/{user_id}",
-    response_model=CoordinatorCreationDTO,
-    status_code=status.HTTP_201_CREATED,
+    # response_model=CoordinatorCreationDTO,
+    status_code=status.HTTP_201_CREATED
 )
-async def create(user_id, coordinator: CoordinatorCreationDTO):
+async def create(user_id:str, coordinator=Depends(get_coordinator_form)):
+    
     return await CoordinatorService.signup(user_id, coordinator)
 
 

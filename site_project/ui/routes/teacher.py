@@ -5,8 +5,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from site_project.application.dtos.creation_dto import TeacherCreationDTO
 from site_project.application.services.teacher import TeacherService
 from site_project.domain.entities.teacher import Teacher
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
+from site_project.ui.routes.utils.forms import get_teacher_form
+
 # Create an instance of APIRouter
 teacher_router = APIRouter(prefix=os.getenv("API_ROUTER_PREFIX_TEACHER"))
 
@@ -16,7 +16,7 @@ teacher_router = APIRouter(prefix=os.getenv("API_ROUTER_PREFIX_TEACHER"))
     response_model=TeacherCreationDTO,
     status_code=status.HTTP_201_CREATED,
 )
-async def create_teacher(user_id, teacher: TeacherCreationDTO):
+async def create_teacher(user_id:str, teacher=Depends(get_teacher_form)):
     return await TeacherService.signup(user_id, teacher)
 
 

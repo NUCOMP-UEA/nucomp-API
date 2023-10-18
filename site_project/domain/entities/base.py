@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel
 from pydantic.fields import Field
-
+from typing import Optional
 
 class TypeUser(str, Enum):
     STUDENT = "student"
@@ -13,16 +13,16 @@ class TypeUser(str, Enum):
 
 class BaseUser(BaseModel):
     id_: UUID = Field(default_factory=uuid4)
-    name: str
+    name: Optional[str] = None
     email: str
     gender: str
     course: str
     password: str
 
-    @classmethod
-    def to_entity(cls, base_info, student):
-        base_info_dict = dict(base_info)
-        student_dict = dict(student)
-        student_final_dict = {**base_info_dict, **student_dict}
-        del student_final_dict["_id"]
-        return cls(**student_final_dict)
+    # @classmethod
+    # def to_entity(cls, base_info, entity):
+    #     base_info_dict = dict(base_info)
+    #     user_dict = dict(entity)
+    #     user_final_dict = {**base_info_dict, **user_dict}
+    #     del user_final_dict["_id"]
+    #     return cls(**user_final_dict)

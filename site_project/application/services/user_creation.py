@@ -18,8 +18,8 @@ class UserCreation:
         if user:
             raise HTTPException(status_code=409, detail="User already exists")
 
-        await repository.create(user_creation_dto, AuthenticationSettings.pwd_context)
-        created_user = await repository.get_user(email)
+        created_user = await repository.create(user_creation_dto, AuthenticationSettings.pwd_context)
+        # created_user = await repository.get_user(email)
         message = {"user_id": str(created_user["id_"])}
         return message
 

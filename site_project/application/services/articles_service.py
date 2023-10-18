@@ -34,5 +34,8 @@ class ArticleService:
         await ArticleRepository.delete_article(article_id)
 
     @classmethod
-    async def list_all_articles(cls):
-        return await ArticleRepository.list_articles()
+    async def list_all_articles(cls, page, per_page):
+        skip = (page - 1) * per_page
+        articles = await ArticleRepository.list_articles(skip, page)
+        result = list(articles)
+        return result 

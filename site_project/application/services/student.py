@@ -24,8 +24,12 @@ class StudentService:
     @staticmethod
     async def get_user_by_id(user_id):
         user = await StudentRepository.get_user_by_id(user_id)
+        print(user)
+        
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
+
+        del user['_id']
         return user
 
     @classmethod

@@ -29,6 +29,7 @@ class TeacherService:
         user = await TeacherRepository.get_user_by_id(user_id)
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
+        del user['_id']
         return user
 
     @staticmethod
@@ -37,13 +38,30 @@ class TeacherService:
             password, student["password"]
         )
         return response
+    
+    @staticmethod
+    async def save_image(teacher):
+        image = teacher.photo
+        filename = teacher.name.replace(' ','_')
+        path = os.path.join('site_project','images','teacher',f"{filename}.jpg")
+   
+        if not os.path.exists(path):
+            os.makedirs(path)
+    
+        with open(path, "wb") as f:
+            f.write(image)
+        
+  
+        return path
 
     @classmethod
     async def signup(cls, user_id, teacher_signup_dto):
         user = await TeacherRepository.get_user(user_id)
-        student = Teacher.to_teacher(user, teacher_signup_dto)
-        student.id_ = str(student.id_)
-        await TeacherRepository.update(user_id, student)
+        teacher = Teacher.to_teacher(user, teacher_signup_dto)
+        teacher.id_ = str(teacher.id_)
+        image_path = cls.save_image(teacher)
+        teacher.photo = image_path
+        await TeacherRepository.update(user_id, teacher)
         message = {"message": "user successfully created"}
         response = JSONResponse(content=message)
         return response

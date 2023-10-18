@@ -1,7 +1,7 @@
 from site_project.domain.repositories.coordinator import ICoordinator
 from site_project.infra.database.base import DatabaseMeta
 from site_project.infra.database.utils.criation_utils import update_info
-
+from site_project.domain.entities.base import BaseUser
 
 class CoordinatorRepository(ICoordinator, metaclass=DatabaseMeta):
     collection_name = "coordinator"
@@ -9,10 +9,13 @@ class CoordinatorRepository(ICoordinator, metaclass=DatabaseMeta):
 
     @classmethod
     async def create(cls, coordinator, pwd_context):
+        base_user = BaseUser(**coordinator.dict())
+        
         password = coordinator.password
-        coordinator_dict = update_info(coordinator)
+        coordinator_dict = update_info(base_user)
         coordinator_dict["password"] = pwd_context.hash(password)
         await cls.collection.insert_one(coordinator_dict)
+        return coordinator_dict
 
     @classmethod
     async def get_user_by_id(cls, user_id):
@@ -28,7 +31,9 @@ class CoordinatorRepository(ICoordinator, metaclass=DatabaseMeta):
 
     @classmethod
     async def update(cls, student_id, new_data):
-        await cls.collection.replace_one(dict(_id=student_id), dict(new_data))
+        new_data_dict = dict(new_data)
+        del new_data_dict['photo']
+        await cls.collection.replace_one(dict(_id=student_id), new_data_dict)
 
     @classmethod
     async def delete(cls, coordinator):

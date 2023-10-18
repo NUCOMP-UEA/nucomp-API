@@ -24,21 +24,6 @@ class EventRepository(IEventRepository,metaclass=DatabaseMeta):
         return cls.collection.replace_one(dict(id_=event_id),event)
 
     @classmethod
-    async def list_events(cls):
-        pipeline = [
-            {
-                "$project": {
-                    "_id": 0,
-                    "id_": 1,
-                    "title": 1,
-                    "place": 1,
-                    "image": 1,
-                    "date": 1,
-                    "site_url": 1,
-             
-                }
-            }
-        ]
-
-        return await cls.collection.aggregate(pipeline).to_list(length=None)
-   
+    async def list_events(cls,skip, per_page):
+        events = await cls.collection.find().skip(skip).limit(per_page).to_list(length=None)
+        return events

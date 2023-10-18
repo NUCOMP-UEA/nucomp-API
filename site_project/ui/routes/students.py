@@ -10,7 +10,6 @@ from site_project.domain.entities.student import Student
 # Create an instance of APIRouter
 student_router = APIRouter(prefix=os.getenv("API_ROUTER_PREFIX_STUDENT"))
 
-
 @student_router.post(
     "/signup/{user_id}",
     response_model=StudentCreationDTO,

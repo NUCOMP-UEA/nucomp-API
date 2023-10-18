@@ -1,6 +1,6 @@
 import os
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Query
 
 from site_project.application.services.coordinator import CoordinatorService
 from site_project.application.dtos.creation_dto import EventCreationDTO
@@ -34,9 +34,12 @@ async def create_events(
     return JSONResponse(status_code=201, content=response)
 
 
+
 @events_router.get("/events-listing/", response_model=List[Event])
-async def get_events():
-    return await EventsService.list_events()
+async def get_events(page: int = Query(1, description="Page number", ge=1), per_page: int = Query(10, description="Items per page", le=100)):
+    result = await EventsService.list_events(page, per_page)
+    print(result)
+    return result
 
 
 @events_router.patch("/event-update/")
